@@ -93,6 +93,20 @@
             z-index: 10;
         }
 
+        .food-btn:active {
+            transform: scale(0.95) translateX(-50%);
+            background: linear-gradient(to bottom, #ff9900, #ff6600);
+        }
+
+        .cooldown-click {
+            animation: cooldownAnimation 0.3s ease;
+        }
+
+        @keyframes cooldownAnimation {
+            0% { background: linear-gradient(to bottom, #ff9900, #ff6600); }
+            100% { background: linear-gradient(to bottom, #ffcc00, #ff9900); }
+        }
+
         .shop-btn {
             width: 70px;
             height: 70px;
@@ -112,6 +126,11 @@
             left: 50%;
             transform: translateX(-130px);
             z-index: 10;
+        }
+
+        .shop-btn:active {
+            transform: scale(0.95) translateX(-130px);
+            background: linear-gradient(to bottom, #689f38, #558b2f);
         }
 
         .multiplier-btn {
@@ -135,16 +154,6 @@
             left: 50%;
             transform: translateX(60px);
             z-index: 10;
-        }
-
-        .food-btn:active {
-            transform: scale(0.95) translateX(-50%);
-            background: linear-gradient(to bottom, #ff9900, #ff6600);
-        }
-
-        .shop-btn:active {
-            transform: scale(0.95) translateX(-130px);
-            background: linear-gradient(to bottom, #689f38, #558b2f);
         }
 
         .multiplier-btn:active {
@@ -221,6 +230,7 @@
             let cooldownActive = false;
             let multiplierTimer = null;
             let cooldownTimer = null;
+            let lastClickTime = 0; // Время последнего клика
             counter.textContent = clicks;
 
             // Проверка сохранённого состояния
@@ -239,6 +249,19 @@
             }
 
             clickBtn.addEventListener('click', (e) => {
+                const currentTime = Date.now();
+                
+                // Проверка задержки (200 мс)
+                if (currentTime - lastClickTime < 200) return;
+                
+                lastClickTime = currentTime;
+                
+                // Анимация кнопки
+                clickBtn.classList.remove('cooldown-click');
+                void clickBtn.offsetWidth; // Триггер перерисовки
+                clickBtn.classList.add('cooldown-click');
+                
+                // Логика клика
                 clicks += clickMultiplier;
                 counter.textContent = clicks;
                 localStorage.setItem('clicks', clicks.toString());
@@ -246,6 +269,7 @@
                 const randomEmoji = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
                 clickBtn.textContent = randomEmoji;
                 
+                // Анимация частиц
                 for (let i = 0; i < 6; i++) {
                     const particle = document.createElement('div');
                     particle.className = 'food-particle';
