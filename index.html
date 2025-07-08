@@ -1,35 +1,151 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Кликер</title>
+    <title>XP Food Clicker</title>
     <meta charset="UTF-8">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Tahoma', sans-serif;
             text-align: center;
             padding: 20px;
+            background: linear-gradient(to bottom, #0088cc, #00aaff);
+            user-select: none;
+            min-height: 100vh;
+            margin: 0;
+            color: white;
         }
         #counter {
-            font-size: 32px;
-            margin: 20px;
+            font-size: 52px;
+            margin: 30px 0;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 
+                2px 2px 0 #D4A017,
+                4px 4px 0 #B8860B,
+                1px -1px 0 #FFEC8B,
+                -1px 1px 0 #FFEC8B,
+                0 0 8px rgba(255, 215, 0, 0.5);
+            transform: perspective(300px) rotateX(10deg);
+            display: inline-block;
+            padding: 0 15px;
+            background: linear-gradient(to bottom, rgba(255,215,0,0.2), rgba(255,255,255,0.1));
+            border-radius: 5px;
+            border: 1px solid rgba(255,215,0,0.3);
+            box-shadow: inset 0 0 10px rgba(255,215,0,0.3);
         }
-        #clickBtn {
-            padding: 15px 30px;
-            font-size: 18px;
-            background: #0088cc;
+        .xp-window {
+            background: #ece9d8;
+            border: 2px solid #003366;
+            border-radius: 8px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto;
+            box-shadow: inset 1px 1px 0 white, 
+                        inset -1px -1px 0 #999,
+                        4px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .food-btn {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(to bottom, #ffcc00, #ff9900);
+            border: 3px solid #003366;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5),
+                        0 4px 8px rgba(0, 0, 0, 0.3);
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23005aff' stroke-width='3'/></svg>"), auto;
+            font-size: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            transition: all 0.2s;
+            position: relative;
+            overflow: visible;
+        }
+        .food-btn:active {
+            transform: scale(0.95) rotate(15deg);
+            background: linear-gradient(to bottom, #ff9900, #ff6600);
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='8' y='24' font-size='24'>⌛</text></svg>"), auto;
+        }
+        .cursor-effect {
+            position: absolute;
+            font-size: 24px;
+            pointer-events: none;
+            animation: floatUp 1s forwards;
+            opacity: 0.8;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-80px) scale(1.5); opacity: 0; }
+        }
+        .title-bar {
+            background: linear-gradient(to right, #000080, #1084d0);
             color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
+            padding: 6px 12px;
+            font-weight: bold;
+            margin: -20px -20px 20px -20px;
+            border-radius: 6px 6px 0 0;
+            text-align: left;
         }
     </style>
 </head>
 <body>
-    <h1>Кликер</h1>
-    <div id="counter">0</div>
-    <button id="clickBtn">Кликнуть</button>
+    <div class="xp-window">
+        <div class="title-bar">Фастфуд-кликер</div>
+        <div id="counter">0</div>
+        
+        <button class="food-btn" id="clickBtn">
+            🍔
+        </button>
+    </div>
 
-    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const counter = document.getElementById('counter');
+            const clickBtn = document.getElementById('clickBtn');
+            const body = document.body;
+            
+            // Массив возможных эмодзи еды
+            const foodEmojis = ['🍔', '🍟', '🥤', '🌭', '🍕', '🍦'];
+            let clicks = parseInt(localStorage.getItem('clicks')) || 0;
+            counter.textContent = clicks;
+
+            clickBtn.addEventListener('click', (e) => {
+                clicks++;
+                counter.textContent = clicks;
+                localStorage.setItem('clicks', clicks.toString());
+                
+                // Случайный выбор новой еды
+                const randomEmoji = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
+                clickBtn.textContent = randomEmoji;
+                
+                // Создаем летающий эффект еды
+                const foodEffect = document.createElement('div');
+                foodEffect.className = 'cursor-effect';
+                foodEffect.textContent = randomEmoji;
+                foodEffect.style.left = (e.clientX - 15) + 'px';
+                foodEffect.style.top = (e.clientY - 15) + 'px';
+                foodEffect.style.color = getRandomColor();
+                document.body.appendChild(foodEffect);
+                
+                // Удаляем через 1 секунду
+                setTimeout(() => foodEffect.remove(), 1000);
+            });
+
+            // Функция для случайного цвета
+            function getRandomColor() {
+                const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF'];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            // Инициализация Telegram WebApp
+            if (window.Telegram?.WebApp?.ready) {
+                Telegram.WebApp.expand();
+                Telegram.WebApp.ready();
+            }
+        });
+    </script>
 </body>
 </html>

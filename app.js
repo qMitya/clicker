@@ -1,29 +1,39 @@
-const counter = document.getElementById('counter');
-const clickBtn = document.getElementById('clickBtn');
-
-// Загружаем клики и защищаемся от некорректных значений
-let clicks = parseInt(localStorage.getItem('clicks')) || 0;
-if (!isFinite(clicks)) clicks = 0; // Если вдруг Infinity, сбрасываем
-
-function updateCounter() {
-    // Проверка на максимальное значение (например, 1 млн)
-    if (clicks > 1_000_000) {
-        counter.textContent = "Много!";
-        return;
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    const counter = document.getElementById('counter');
+    const clickBtn = document.getElementById('clickBtn');
+    const clickEffect = document.getElementById('clickEffect');
+    
+    let clicks = parseInt(localStorage.getItem('clicks')) || 0;
     counter.textContent = clicks;
-    localStorage.setItem('clicks', clicks.toString());
-}
 
-clickBtn.addEventListener('click', () => {
-    // Защита от переполнения
-    if (clicks < Number.MAX_SAFE_INTEGER) {
+    // Анимация клика
+    function animateClick() {
+        // Пульсация
+        clickEffect.style.transform = 'scale(0.5)';
+        clickEffect.style.opacity = '0.8';
+        
+        // Анимация эмодзи
+        clickBtn.innerHTML = '🍟'; // Меняем на другой эмодзи при клике
+        clickBtn.style.transform = 'scale(0.9) rotate(10deg)';
+        
+        setTimeout(() => {
+            clickEffect.style.transform = 'scale(2)';
+            clickEffect.style.opacity = '0';
+            clickBtn.innerHTML = '🍔';
+            clickBtn.style.transform = 'scale(1) rotate(0)';
+        }, 200);
+    }
+
+    clickBtn.addEventListener('click', () => {
         clicks++;
-        updateCounter();
+        counter.textContent = clicks;
+        localStorage.setItem('clicks', clicks.toString());
+        animateClick();
+    });
+
+    // Инициализация Telegram WebApp
+    if (window.Telegram?.WebApp?.ready) {
+        Telegram.WebApp.expand();
+        Telegram.WebApp.ready();
     }
 });
-
-// Инициализация
-Telegram.WebApp.expand();
-Telegram.WebApp.ready();
-updateCounter();
