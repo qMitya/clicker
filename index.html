@@ -124,12 +124,12 @@
             transition: all 0.3s;
             position: absolute;
             left: 50%;
-            transform: translateX(-130px);
+            transform: translateX(-180px);
             z-index: 10;
         }
 
         .shop-btn:active {
-            transform: scale(0.95) translateX(-130px);
+            transform: scale(0.95) translateX(-180px);
             background: linear-gradient(to bottom, #689f38, #558b2f);
         }
 
@@ -152,12 +152,38 @@
             transition: all 0.3s;
             position: absolute;
             left: 50%;
-            transform: translateX(60px);
+            transform: translateX(110px);
             z-index: 10;
         }
 
+        .casino-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(to bottom, #4a148c, #7b1fa2);
+            border: 3px solid #003366;
+            box-shadow: 
+                inset 0 0 8px rgba(255, 255, 255, 0.5),
+                0 3px 6px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            z-index: 10;
+        }
+
+        .casino-btn:active {
+            transform: scale(0.95);
+            background: linear-gradient(to bottom, #7b1fa2, #6a1b9a);
+        }
+
         .multiplier-btn:active {
-            transform: scale(0.95) translateX(60px);
+            transform: scale(0.95) translateX(110px);
             background: linear-gradient(to bottom, #ff7043, #f4511e);
         }
 
@@ -201,25 +227,6 @@
         .cooldown {
             background: linear-gradient(to bottom, #9E9E9E, #757575) !important;
             cursor: not-allowed !important;
-        }
-        
-        /* Стили для кнопки казино */
-        .casino-btn {
-            position: absolute;
-            left: 10%;
-            top: 30px;
-            background: linear-gradient(to bottom, #4a148c, #7b1fa2);
-            border: 3px solid #003366;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            z-index: 15;
         }
         
         /* Модальное окно казино */
@@ -267,7 +274,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.2s;
@@ -377,10 +384,9 @@
     </style>
 </head>
 <body>
-    <div class="casino-btn" id="casinoBtn">🎰</div>
-    
     <div class="xp-window">
         <div class="title-bar">Фастфуд-клик</div>
+        <button class="casino-btn" id="casinoBtn">🎰</button>
         <div id="counter">0</div>
         
         <div class="buttons-container">
@@ -396,9 +402,9 @@
             <div class="casino-title">🎰 Казино Рулетка 🎰</div>
             
             <div class="roulette-container">
-                <div class="roulette-segment x2" data-multiplier="2">x2 (35%)</div>
-                <div class="roulette-segment x3" data-multiplier="3">x3 (20%)</div>
-                <div class="roulette-segment x5" data-multiplier="5">x5 (7%)</div>
+                <div class="roulette-segment x2" data-multiplier="2">x2</div>
+                <div class="roulette-segment x3" data-multiplier="3">x3</div>
+                <div class="roulette-segment x5" data-multiplier="5">x5</div>
             </div>
             
             <input type="number" class="bet-input" id="betInput" placeholder="Сумма ставки (500-1500)" min="500" max="1500">
@@ -417,6 +423,7 @@
             const clickBtn = document.getElementById('clickBtn');
             const shopBtn = document.getElementById('shopBtn');
             const multiplierBtn = document.getElementById('multiplierBtn');
+            const casinoBtn = document.getElementById('casinoBtn');
             
             const foodEmojis = ['🍔', '🍟', '🥤', '🌭', '🍕', '🍦'];
             let clicks = parseInt(localStorage.getItem('clicks')) || 0;
@@ -446,8 +453,8 @@
             clickBtn.addEventListener('click', (e) => {
                 const currentTime = Date.now();
                 
-                // Проверка задержки (300 мс)
-                if (currentTime - lastClickTime < 300) return;
+                // Проверка задержки (170 мс вместо 300)
+                if (currentTime - lastClickTime < 170) return;
                 
                 lastClickTime = currentTime;
                 
@@ -546,7 +553,6 @@
             }
 
             // Элементы казино
-            const casinoBtn = document.getElementById('casinoBtn');
             const casinoModal = document.getElementById('casinoModal');
             const closeCasino = document.getElementById('closeCasino');
             const betInput = document.getElementById('betInput');
