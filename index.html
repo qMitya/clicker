@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>XP Food Clicker</title>
+    <title>Фастфуд-клик</title>
     <meta charset="UTF-8">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
@@ -9,31 +9,43 @@
             font-family: 'Tahoma', sans-serif;
             text-align: center;
             padding: 20px;
-            background: linear-gradient(to bottom, #0088cc, #00aaff);
+            background: #0088cc;
             user-select: none;
             min-height: 100vh;
             margin: 0;
-            color: white;
+            position: relative;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(45deg, rgba(0,136,204,0.1) 25%, transparent 25%, transparent 75%, rgba(0,170,255,0.1) 75%),
+                linear-gradient(45deg, rgba(0,136,204,0.1) 25%, transparent 25%, transparent 75%, rgba(0,170,255,0.1) 75%);
+            background-size: 100px 100px;
+            background-position: 0 0, 50px 50px;
         }
+
         #counter {
-            font-size: 52px;
+            font-size: 56px;
+            font-weight: 600;
             margin: 30px 0;
-            font-weight: bold;
-            color: #FFD700;
+            color: #FFC107;
             text-shadow: 
-                2px 2px 0 #D4A017,
-                4px 4px 0 #B8860B,
-                1px -1px 0 #FFEC8B,
-                -1px 1px 0 #FFEC8B,
-                0 0 8px rgba(255, 215, 0, 0.5);
-            transform: perspective(300px) rotateX(10deg);
+                1px 1px 0 #FFA000,
+                2px 2px 0 #FF6F00,
+                3px 3px 0 #E65100,
+                4px 4px 6px rgba(0,0,0,0.3);
+            transform: perspective(200px) rotateX(10deg);
             display: inline-block;
-            padding: 0 15px;
-            background: linear-gradient(to bottom, rgba(255,215,0,0.2), rgba(255,255,255,0.1));
-            border-radius: 5px;
-            border: 1px solid rgba(255,215,0,0.3);
-            box-shadow: inset 0 0 10px rgba(255,215,0,0.3);
+            padding: 0 20px;
+            background: linear-gradient(to bottom, rgba(255,193,7,0.2), rgba(255,255,255,0.1));
+            border-radius: 8px;
+            box-shadow: 
+                inset 0 0 15px rgba(255,193,7,0.3),
+                0 0 20px rgba(255,193,7,0.2);
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 10;
         }
+
         .xp-window {
             background: #ece9d8;
             border: 2px solid #003366;
@@ -42,44 +54,129 @@
             width: 90%;
             max-width: 400px;
             margin: 0 auto;
-            box-shadow: inset 1px 1px 0 white, 
-                        inset -1px -1px 0 #999,
-                        4px 4px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 
+                inset 1px 1px 0 white, 
+                inset -1px -1px 0 #999,
+                4px 4px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
         }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            position: relative;
+            height: 140px;
+            width: 320px;
+        }
+
         .food-btn {
             width: 120px;
             height: 120px;
             border-radius: 50%;
             background: linear-gradient(to bottom, #ffcc00, #ff9900);
             border: 3px solid #003366;
-            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5),
-                        0 4px 8px rgba(0, 0, 0, 0.3);
-            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23005aff' stroke-width='3'/></svg>"), auto;
+            box-shadow: 
+                inset 0 0 10px rgba(255, 255, 255, 0.5),
+                0 4px 8px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
             font-size: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px auto;
-            transition: all 0.2s;
-            position: relative;
-            overflow: visible;
-        }
-        .food-btn:active {
-            transform: scale(0.95) rotate(15deg);
-            background: linear-gradient(to bottom, #ff9900, #ff6600);
-            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='8' y='24' font-size='24'>⌛</text></svg>"), auto;
-        }
-        .cursor-effect {
+            transition: all 0.3s;
             position: absolute;
-            font-size: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .shop-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(to bottom, #8bc34a, #689f38);
+            border: 3px solid #003366;
+            box-shadow: 
+                inset 0 0 8px rgba(255, 255, 255, 0.5),
+                0 3px 6px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-130px);
+            z-index: 10;
+        }
+
+        .multiplier-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(to bottom, #ff8a65, #ff7043);
+            border: 3px solid #003366;
+            box-shadow: 
+                inset 0 0 8px rgba(255, 255, 255, 0.5),
+                0 3px 6px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            position: absolute;
+            left: 50%;
+            transform: translateX(60px);
+            z-index: 10;
+        }
+
+        .food-btn:active {
+            transform: scale(0.95) translateX(-50%);
+            background: linear-gradient(to bottom, #ff9900, #ff6600);
+        }
+
+        .shop-btn:active {
+            transform: scale(0.95) translateX(-130px);
+            background: linear-gradient(to bottom, #689f38, #558b2f);
+        }
+
+        .multiplier-btn:active {
+            transform: scale(0.95) translateX(60px);
+            background: linear-gradient(to bottom, #ff7043, #f4511e);
+        }
+
+        .food-particle {
+            position: fixed;
+            font-size: 30px;
             pointer-events: none;
-            animation: floatUp 1s forwards;
-            opacity: 0.8;
+            animation: fly 1s forwards;
+            z-index: 20;
         }
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-80px) scale(1.5); opacity: 0; }
+
+        @keyframes fly {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: 
+                    translate(
+                        calc(var(--tx) * 100px), 
+                        calc(var(--ty) * 100px)
+                    ) 
+                    rotate(360deg) 
+                    scale(0);
+                opacity: 0;
+            }
         }
+
         .title-bar {
             background: linear-gradient(to right, #000080, #1084d0);
             color: white;
@@ -88,59 +185,147 @@
             margin: -20px -20px 20px -20px;
             border-radius: 6px 6px 0 0;
             text-align: left;
+            position: relative;
+            z-index: 15;
+        }
+
+        .cooldown {
+            background: linear-gradient(to bottom, #9E9E9E, #757575) !important;
+            cursor: not-allowed !important;
         }
     </style>
 </head>
 <body>
     <div class="xp-window">
-        <div class="title-bar">Фастфуд-кликер</div>
+        <div class="title-bar">Фастфуд-клик</div>
         <div id="counter">0</div>
         
-        <button class="food-btn" id="clickBtn">
-            🍔
-        </button>
+        <div class="buttons-container">
+            <button class="shop-btn" id="shopBtn">🛒</button>
+            <button class="food-btn" id="clickBtn">🍔</button>
+            <button class="multiplier-btn" id="multiplierBtn">x2</button>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const counter = document.getElementById('counter');
             const clickBtn = document.getElementById('clickBtn');
-            const body = document.body;
+            const shopBtn = document.getElementById('shopBtn');
+            const multiplierBtn = document.getElementById('multiplierBtn');
             
-            // Массив возможных эмодзи еды
             const foodEmojis = ['🍔', '🍟', '🥤', '🌭', '🍕', '🍦'];
             let clicks = parseInt(localStorage.getItem('clicks')) || 0;
+            let clickMultiplier = 1;
+            let multiplierActive = false;
+            let cooldownActive = false;
+            let multiplierTimer = null;
+            let cooldownTimer = null;
             counter.textContent = clicks;
 
+            // Проверка сохранённого состояния
+            const lastActivation = parseInt(localStorage.getItem('lastMultiplierActivation')) || 0;
+            const currentTime = Date.now();
+            const cooldownTime = 7 * 60 * 1000; // 7 минут в мс
+            
+            if (currentTime - lastActivation < 30 * 1000) {
+                // Если множитель активен
+                const timeLeft = 30 - Math.floor((currentTime - lastActivation) / 1000);
+                activateMultiplier(timeLeft);
+            } else if (currentTime - lastActivation < cooldownTime + 30 * 1000) {
+                // Если в режиме кулдауна
+                const cooldownLeft = Math.ceil((cooldownTime - (currentTime - lastActivation - 30000)) / 1000);
+                startCooldown(cooldownLeft);
+            }
+
             clickBtn.addEventListener('click', (e) => {
-                clicks++;
+                clicks += clickMultiplier;
                 counter.textContent = clicks;
                 localStorage.setItem('clicks', clicks.toString());
                 
-                // Случайный выбор новой еды
                 const randomEmoji = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
                 clickBtn.textContent = randomEmoji;
                 
-                // Создаем летающий эффект еды
-                const foodEffect = document.createElement('div');
-                foodEffect.className = 'cursor-effect';
-                foodEffect.textContent = randomEmoji;
-                foodEffect.style.left = (e.clientX - 15) + 'px';
-                foodEffect.style.top = (e.clientY - 15) + 'px';
-                foodEffect.style.color = getRandomColor();
-                document.body.appendChild(foodEffect);
-                
-                // Удаляем через 1 секунду
-                setTimeout(() => foodEffect.remove(), 1000);
+                for (let i = 0; i < 6; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'food-particle';
+                    particle.textContent = randomEmoji;
+                    particle.style.left = e.pageX + 'px';
+                    particle.style.top = e.pageY + 'px';
+                    particle.style.setProperty('--tx', Math.cos(i * 60 * Math.PI/180));
+                    particle.style.setProperty('--ty', Math.sin(i * 60 * Math.PI/180));
+                    particle.style.color = getRandomColor();
+                    document.body.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.parentNode.removeChild(particle);
+                        }
+                    }, 1000);
+                }
             });
 
-            // Функция для случайного цвета
+            shopBtn.addEventListener('click', () => {
+                alert('Магазин скоро откроется!');
+            });
+
+            multiplierBtn.addEventListener('click', () => {
+                if (!multiplierActive && !cooldownActive) {
+                    activateMultiplier(30);
+                    localStorage.setItem('lastMultiplierActivation', Date.now().toString());
+                }
+            });
+
+            function activateMultiplier(seconds) {
+                if (multiplierTimer) clearInterval(multiplierTimer);
+                if (cooldownTimer) clearInterval(cooldownTimer);
+                
+                multiplierActive = true;
+                clickMultiplier = 2;
+                multiplierBtn.classList.remove('cooldown');
+                multiplierBtn.style.background = 'linear-gradient(to bottom, #4CAF50, #2E7D32)';
+                
+                let timer = seconds;
+                multiplierTimer = setInterval(() => {
+                    multiplierBtn.textContent = timer;
+                    timer--;
+                    
+                    if (timer < 0) {
+                        clearInterval(multiplierTimer);
+                        multiplierActive = false;
+                        clickMultiplier = 1;
+                        startCooldown(420); // 7 минут в секундах
+                    }
+                }, 1000);
+            }
+
+            function startCooldown(seconds) {
+                cooldownActive = true;
+                multiplierBtn.classList.add('cooldown');
+                multiplierBtn.style.background = 'linear-gradient(to bottom, #9E9E9E, #757575)';
+                
+                let timer = seconds;
+                cooldownTimer = setInterval(() => {
+                    const mins = Math.floor(timer / 60);
+                    const secs = timer % 60;
+                    multiplierBtn.textContent = `${mins}:${secs < 10 ? '0' + secs : secs}`;
+                    timer--;
+                    
+                    if (timer < 0) {
+                        clearInterval(cooldownTimer);
+                        cooldownActive = false;
+                        multiplierBtn.textContent = 'x2';
+                        multiplierBtn.style.background = 'linear-gradient(to bottom, #ff8a65, #ff7043)';
+                        multiplierBtn.classList.remove('cooldown');
+                    }
+                }, 1000);
+            }
+
             function getRandomColor() {
-                const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF'];
+                const colors = ['#FF5252', '#FFEB3B', '#4CAF50', '#2196F3', '#9C27B0', '#FF9800'];
                 return colors[Math.floor(Math.random() * colors.length)];
             }
 
-            // Инициализация Telegram WebApp
             if (window.Telegram?.WebApp?.ready) {
                 Telegram.WebApp.expand();
                 Telegram.WebApp.ready();
